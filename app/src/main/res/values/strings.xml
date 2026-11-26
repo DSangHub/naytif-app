@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">naytif</string>
+    <string name="enable_access">Enable Notification Access</string>
+    <string name="access_required">Notification access is required for naytif to intercept and manage notifications.</string>
+</resources>
