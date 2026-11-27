@@ -3,6 +3,7 @@ package app.naytif
 import android.content.Intent
 import android.os.Bundle
 import android.provider.Settings
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import app.naytif.databinding.ActivityMainBinding
@@ -54,12 +55,18 @@ class MainActivity : AppCompatActivity() {
 
         // Auto-delete checker
         scheduler.scheduleAtFixedRate({
-            val now = System.currentTimeMillis()
-            val toDelete = NaytifNotificationListener.notifications.filter {
-                it.autoDeleteAt != null && it.autoDeleteAt!! <= now && !it.isFavorite
-            }
-            toDelete.forEach { notif ->
-                NaytifNotificationListener.instance?.cancelByKey(notif.key)
+            // An uncaught exception would silently stop all future runs, so log and carry on.
+            try {
+                val now = System.currentTimeMillis()
+                val toDelete = NaytifNotificationListener.notifications.filter { n ->
+                    val deleteAt = n.autoDeleteAt
+                    deleteAt != null && deleteAt <= now && !n.isFavorite
+                }
+                toDelete.forEach { notif ->
+                    NaytifNotificationListener.instance?.cancelByKey(notif.key)
+                }
+            } catch (e: Exception) {
+                Log.e("Naytif", "Auto-delete check failed", e)
             }
         }, 0, 30, TimeUnit.SECONDS)
 

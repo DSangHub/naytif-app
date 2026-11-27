@@ -5,4 +5,11 @@
         <item name="colorPrimaryVariant">#3700B3</item>
         <item name="colorOnPrimary">#FFFFFF</item>
     </style>
+
+    <!-- Same colors, but with an action bar for screens that show a title and Up arrow -->
+    <style name="Theme.Naytif.WithActionBar" parent="Theme.Material3.DayNight">
+        <item name="colorPrimary">#6200EE</item>
+        <item name="colorPrimaryVariant">#3700B3</item>
+        <item name="colorOnPrimary">#FFFFFF</item>
+    </style>
 </resources>

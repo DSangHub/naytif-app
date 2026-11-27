@@ -12,10 +12,19 @@ Unified notification inbox that intercepts notifications via `NotificationListen
 - Skips own notifications
 
 ## How to build
-1. Open the `naytif-app` folder in Android Studio
+1. Open the `naytif-app` folder in Android Studio (or use the Gradle wrapper below)
 2. Sync Gradle
 3. Run on a device or emulator (API 26+)
 4. Grant **Notification access** when prompted (Settings → Apps → Special access → Notification access)
+
+### Command line
+```bash
+./gradlew assembleDebug   # APK -> app/build/outputs/apk/debug/
+./gradlew installDebug    # install on a connected device/emulator
+```
+
+Toolchain: Gradle 8.11.1 (wrapper), AGP 8.7.3, Kotlin 2.1.0, JDK 17, compile/target SDK 35.
+Dependency versions live in `gradle/libs.versions.toml`.
 
 ## Ads of Interest (Newly Released Apps)
 - Browse newly released apps by category (Productivity, Social, Finance, Health, Utilities, Games)
