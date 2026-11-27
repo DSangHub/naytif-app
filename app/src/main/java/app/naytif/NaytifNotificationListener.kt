@@ -53,19 +53,23 @@ class NaytifNotificationListener : NotificationListenerService() {
         // Skip own notifications
         if (packageName == "app.naytif") return
 
+        val existing = notifications.indexOfFirst { it.key == sbn.key }
+        val previous = notifications.getOrNull(existing)
+
+        // An update to a notification we already have keeps the user's
+        // importance, star and auto-delete timer; only the content changes.
         val captured = CapturedNotification(
             key = sbn.key,
             packageName = packageName,
             title = title,
             text = text,
             postTime = sbn.postTime,
-            importance = Importance.NORMAL, // user can override
-            isFavorite = false,
-            autoDeleteAt = null
+            importance = previous?.importance ?: Importance.NORMAL,
+            isFavorite = previous?.isFavorite ?: false,
+            autoDeleteAt = previous?.autoDeleteAt
         )
 
-        val existing = notifications.indexOfFirst { it.key == sbn.key }
-        if (existing >= 0) {
+        if (previous != null) {
             notifications[existing] = captured
         } else {
             notifications.add(0, captured) // newest first
