@@ -4,13 +4,18 @@ import android.service.notification.NotificationListenerService
 import android.service.notification.StatusBarNotification
 import android.app.Notification
 import android.util.Log
+import java.util.concurrent.CopyOnWriteArrayList
 
 class NaytifNotificationListener : NotificationListenerService() {
 
     companion object {
-        var instance: NaytifNotificationListener? = null
-        val notifications = mutableListOf<CapturedNotification>()
-        var onUpdate: (() -> Unit)? = null
+        @Volatile var instance: NaytifNotificationListener? = null
+
+        // Read by the auto-delete timer on a background thread while the listener
+        // adds/removes on the main thread; copy-on-write makes that safe to iterate.
+        val notifications = CopyOnWriteArrayList<CapturedNotification>()
+
+        @Volatile var onUpdate: (() -> Unit)? = null
     }
 
     override fun onListenerConnected() {
@@ -35,7 +40,7 @@ class NaytifNotificationListener : NotificationListenerService() {
     }
 
     override fun onNotificationRemoved(sbn: StatusBarNotification) {
-        notifications.removeAll { it.key == sbn.key }
+        notifications.removeIf { it.key == sbn.key }
         onUpdate?.invoke()
     }
 
@@ -69,7 +74,7 @@ class NaytifNotificationListener : NotificationListenerService() {
 
     fun cancelByKey(key: String) {
         cancelNotification(key)
-        notifications.removeAll { it.key == key }
+        notifications.removeIf { it.key == key }
         onUpdate?.invoke()
     }
 }

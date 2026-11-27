@@ -25,6 +25,7 @@
         <activity
             android:name=".AppsOfInterestActivity"
             android:exported="false"
+            android:theme="@style/Theme.Naytif.WithActionBar"
             android:parentActivityName=".MainActivity" />
 
         <service
