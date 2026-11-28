@@ -13,7 +13,7 @@ import java.util.concurrent.TimeUnit
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
-    private val adapter = NotificationAdapter(
+    private val adapter: NotificationAdapter = NotificationAdapter(
         onTag = { notif, importance ->
             notif.importance = importance
             adapter.notifyDataSetChanged()
